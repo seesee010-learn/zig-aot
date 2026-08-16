@@ -1,9 +1,7 @@
 // this codebase only aims to solve part 1, not 2.
 const std = @import("std");
 
-const motion = enum {
-    L, R
-};
+const motion = enum { L, R };
 const fileContainer = struct { char: motion, amount: u16 };
 var global: u8 = 50;
 
@@ -30,7 +28,9 @@ pub fn main(init: std.process.Init) !void {
     // read through the whole file and on every line do an .append()
 
     const file = try std.Io.Dir.openFileAbsolute(
-        io, args[1], .{},
+        io,
+        args[1],
+        .{},
     );
     defer file.close(io);
 
@@ -39,8 +39,7 @@ pub fn main(init: std.process.Init) !void {
     var file_reader = file.reader(io, &buff);
 
     var container: fileContainer = undefined;
-    while (try file_reader.interface.takeDelimiter('\n')) | raw_line | {
-
+    while (try file_reader.interface.takeDelimiter('\n')) |raw_line| {
         const line = std.mem.trim(u8, raw_line, " \r\t");
         if (line.len == 0) continue;
 
@@ -64,18 +63,17 @@ pub fn main(init: std.process.Init) !void {
 
         switch (temp.char) {
             motion.L => {
-                const diff = @as(i32, global) - @as(i32, value.amount); 
+                const diff = @as(i32, global) - @as(i32, value.amount);
                 global = @intCast(@mod(diff, 100));
             },
-            
+
             motion.R => {
-                const diff = @as(i32, global) + @as(i32, value.amount); 
+                const diff = @as(i32, global) + @as(i32, value.amount);
                 global = @intCast(@mod(diff, 100));
-            }, 
+            },
         }
         // now let me know how often `0` got hit
         if (global == 0) zero_count += 1;
-
     }
     std.debug.print("{d}\n", .{global});
     std.debug.print("{d}\n", .{zero_count});
