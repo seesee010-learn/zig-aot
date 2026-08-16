@@ -1,2 +1,5 @@
 # AOC
 input.txt
+input2.txt
+.zig-cache/
+zig-out/
